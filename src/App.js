@@ -7,7 +7,9 @@ class App extends Component {
         super();
         this.state = {
             data: "",
-            value: 1,
+            firstName: '',
+            surname: '',
+            description: '',
         }
 
     }
@@ -22,6 +24,35 @@ class App extends Component {
             });
     };
 
+    handleClick() {
+        this.setState({
+                firstName: "place",
+                surname: "holder",
+                description: "01",
+
+            }, function () {
+                this.makeRequest()
+            }
+        );
+
+
+    }
+
+    makeRequest() {
+        if (this.state.firstName.length < 1 || this.state.surname.length < 1 || this.state.description.length < 1) {
+            alert('You must fill all form to submit')
+        } else {
+            fetch('http://localhost:8080/newemployee', {
+                method: 'POST',
+                body: JSON.stringify({
+                    firstName: this.state.firstName,
+                    surname: this.state.surname,
+                    description: this.state.description,
+                })
+            });
+        }
+    }
+
     render() {
         let rows = [];
         if (this.state.data) {
@@ -33,7 +64,13 @@ class App extends Component {
                     <Table
                         data={this.state.data}
                     />
-                    <Form/>
+                    <Form
+                        firstName={this.state.firstName}
+                        surname={this.state.surname}
+                        description={this.state.description}
+                        onClick={() => this.handleClick()}
+
+                    />
                 </div>
             )
         } else {
@@ -59,15 +96,14 @@ class Table extends Component {
     }
 
     renderRow() {
-        console.log(this.props.data._embedded.employees[0].firstName);
         let data = this.props.data._embedded;
         let dataRows = [];
 
         for (let i = 0; i < data.employees.length; i++) {
             dataRows.push(
-                <tr className="DataRow" id={i}>
+                <tr className="DataRow" key={i}>
                     <td>{data.employees[i].firstName}</td>
-                    <td>{data.employees[i].lastName}</td>
+                    <td>{data.employees[i].surname}</td>
                     <td>{data.employees[i].description}</td>
                 </tr>
             )
@@ -88,14 +124,15 @@ class Table extends Component {
 
 }
 class Form extends Component {
+
     render() {
         return (
             <div>
-                <form type="submit">
-                    <input type ="text" />
-                    <input type ="text" />
-                    <input type ="text" />
-                    <button>Hi Ho</button>
+                <form className="submit" onSubmit={() => this.props.onClick()}>
+                    <input type="text" id="firstName" placeholder="First name"/>
+                    <input type="text" id="surname" placeholder="Surname"/>
+                    <input type="text" id="description" placeholder="Description"/>
+                    <input type="submit"  value="Submit"/>
                 </form>
             </div>
         )

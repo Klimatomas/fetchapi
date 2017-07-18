@@ -34,3 +34,7 @@ table, th, td {
 .header ,.data{
     display: inherit;
 }
+
+.submit{
+    padding-top: 30px;
+}
