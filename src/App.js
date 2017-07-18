@@ -27,7 +27,7 @@ class App extends Component {
 
     handleChange(e) {
         this.setState({
-         [e.target.id]: e.target.value
+            [e.target.id]: e.target.value
         });
         e.preventDefault();
 
@@ -37,7 +37,7 @@ class App extends Component {
         if (this.state.firstName.length < 1 || this.state.surname.length < 1 || this.state.description.length < 1) {
             alert('You must fill all forms to submit')
         } else {
-            fetch('http://localhost:8080/newemployee', {
+            fetch('http://localhost:8080/api/newemployee', {
                 method: 'POST',
                 body: JSON.stringify({
                     firstName: this.state.firstName,
