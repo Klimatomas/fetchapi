@@ -15,6 +15,11 @@ class App extends Component {
     }
 
     componentDidMount() {
+        this.getData();
+
+    };
+
+    getData() {
         fetch("http://localhost:8080/api/employees")
             .then((response) => {
                 return response.json()
@@ -22,7 +27,7 @@ class App extends Component {
             .then((json) => {
                 this.setState({data: json});
             });
-    };
+    }
 
 
     handleChange(e) {
@@ -33,7 +38,7 @@ class App extends Component {
 
     }
 
-    handleClick() {
+    handleClick(e) {
         if (this.state.firstName.length < 1 || this.state.surname.length < 1 || this.state.description.length < 1) {
             alert('You must fill all forms to submit')
         } else {
@@ -46,7 +51,20 @@ class App extends Component {
                 })
             });
         }
+        e.preventDefault();
+        this.getData();
+        this.setDefaultState();
 
+
+    }
+
+    setDefaultState() {
+        this.setState({
+            firstName: "",
+            surname: "",
+            description: ""
+
+        })
     }
 
     render() {
@@ -64,7 +82,7 @@ class App extends Component {
                         firstName={this.state.firstName}
                         surname={this.state.surname}
                         description={this.state.description}
-                        onClick={() => this.handleClick()}
+                        onClick={(e) => this.handleClick(e)}
                         onChange={(e) => this.handleChange(e)}
 
                     />
@@ -124,7 +142,7 @@ class Form extends Component {
     render() {
         return (
             <div>
-                <form className="submit" onSubmit={() => this.props.onClick()}>
+                <form className="submit" onSubmit={(e) => this.props.onClick(e)}>
                     <input type="text"
                            id="firstName"
                            placeholder="First name"
