@@ -6,7 +6,7 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            data: "",
+            data: '',
             firstName: '',
             surname: '',
             description: '',
@@ -24,23 +24,18 @@ class App extends Component {
             });
     };
 
-    handleClick() {
+
+    handleChange(e) {
         this.setState({
-                firstName: "place",
-                surname: "holder",
-                description: "01",
-
-            }, function () {
-                this.makeRequest()
-            }
-        );
-
+         [e.target.id]: e.target.value
+        });
+        e.preventDefault();
 
     }
 
-    makeRequest() {
+    handleClick() {
         if (this.state.firstName.length < 1 || this.state.surname.length < 1 || this.state.description.length < 1) {
-            alert('You must fill all form to submit')
+            alert('You must fill all forms to submit')
         } else {
             fetch('http://localhost:8080/newemployee', {
                 method: 'POST',
@@ -51,6 +46,7 @@ class App extends Component {
                 })
             });
         }
+
     }
 
     render() {
@@ -69,6 +65,7 @@ class App extends Component {
                         surname={this.state.surname}
                         description={this.state.description}
                         onClick={() => this.handleClick()}
+                        onChange={(e) => this.handleChange(e)}
 
                     />
                 </div>
@@ -124,15 +121,31 @@ class Table extends Component {
 
 }
 class Form extends Component {
-
     render() {
         return (
             <div>
                 <form className="submit" onSubmit={() => this.props.onClick()}>
-                    <input type="text" id="firstName" placeholder="First name"/>
-                    <input type="text" id="surname" placeholder="Surname"/>
-                    <input type="text" id="description" placeholder="Description"/>
-                    <input type="submit"  value="Submit"/>
+                    <input type="text"
+                           id="firstName"
+                           placeholder="First name"
+                           onChange={(e) => this.props.onChange(e)}
+                           value={this.props.firstName}/>
+
+                    <input type="text"
+                           id="surname"
+                           placeholder="Surname"
+                           onChange={(e) => this.props.onChange(e)}
+                           value={this.props.surname}/>
+
+                    <input type="text"
+                           id="description"
+                           placeholder="Description"
+                           onChange={(e) => this.props.onChange(e)}
+                           value={this.props.description}/>
+
+                    <input type="submit"
+                           value="Submit"/>
+
                 </form>
             </div>
         )
@@ -140,5 +153,6 @@ class Form extends Component {
 
 
 }
+
 
 export default App;
